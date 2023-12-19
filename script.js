@@ -1,7 +1,7 @@
 // - canvas configuration
 const canvas = document.getElementById("canvas");
-canvas.width = 600;
-canvas.height = 800;
+canvas.width = 400;
+canvas.height = 600;
 canvas.style.backgroundColor = "black";
 const ctx = canvas.getContext("2d");
 
@@ -23,19 +23,22 @@ let isBallGoingRight = true;
 let isBallGoingDown = true;
 let ballVelocity = 2;
 let colorBall = "white";
+let sizeOfBall = 12;
 
 //paddle
-let paddelWidth = 100;
-let paddelHeight = 15;
+let paddelWidth = 80;
+let paddelHeight = 12;
 let paddelVelocity = 14;
 
 let paddelX = 250;
-const padYgap = 5;
-let paddelY = 800 - (paddelHeight + padYgap); 
+const padYgap = 2;
+let paddelY = canvas.height - (paddelHeight + padYgap); 
 
 // - funciones
 
 const moveBall = () => {
+
+  console.log(ballY, canvas.height - paddelHeight)
   if (isBallGoingRight === true) {
     ballX = ballX + ballVelocity;
   } else {
@@ -51,7 +54,7 @@ const moveBall = () => {
 
 const drawBall = () => {
     ctx.beginPath();
-    ctx.arc(ballX, ballY, 15, 0, 2 * Math.PI);
+    ctx.arc(ballX, ballY, sizeOfBall, 0, 2 * Math.PI);
     ctx.fillStyle = colorBall;
     ctx.fill();
     ctx.closePath();
@@ -99,7 +102,7 @@ const collisionBall = () => {
 };
 
 const collisionBallPaddle = () => {
-  if (ballY > paddelY - padYgap && ballX > paddelX && ballX < paddelX + paddelWidth) {
+  if (ballY === paddelY - padYgap && ballX > paddelX && ballX < paddelX + paddelWidth) {
     isBallGoingDown = false;
     ballVelocity += velocityIncrement;
     level++;
@@ -109,7 +112,7 @@ const collisionBallPaddle = () => {
 };
 
 const gameOver = () => {
-  if (ballY > canvas.height - paddelHeight) {
+  if (ballY + padYgap >= canvas.height - paddelHeight) {
     isGameOn = false;
     level = 0;
     panelSetup.style.display = "flex";
